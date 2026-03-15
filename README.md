@@ -207,6 +207,18 @@ Fluxo manual sugerido:
 
 ---
 
+## ✨ Atualizações Recentes (UI e UX)
+
+- O fluxo entre cadastro e listagem agora ocorre em janela única, com alternância de telas via `CardLayout`.
+- A tabela de produtos foi configurada como somente leitura, bloqueando edição por duplo clique.
+- Os alertas passaram a usar um diálogo Swing dedicado (`AlertaDialog`) no lugar de uso direto de `JOptionPane`.
+- O modal de alerta recebeu padronização visual e foco na mensagem principal ao usuário.
+- Ao exibir alertas, a tela de fundo é escurecida para reforçar a prioridade da ação.
+- Foram adicionados os arquivos `AlertaDialog.java`, `AlertaDialog.form` e `AlertaUtil.java`.
+- A pasta `test/` foi removida por não conter suíte de testes ativa.
+
+---
+
 ## 📄 Licença
 
 Licenciado sob MIT. Você pode usar, modificar e distribuir, mantendo o aviso de copyright e atribuindo crédito a **Lucas Hochmann Rosa / hrlucas.dev**.

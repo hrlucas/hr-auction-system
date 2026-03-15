@@ -1,15 +1,23 @@
+import java.awt.CardLayout;
+import java.awt.Container;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 public class cadastroVIEW extends javax.swing.JFrame {
 
-    private listagemVIEW listagemAberta;
+    private static final String TELA_CADASTRO = "cadastro";
+    private static final String TELA_LISTAGEM = "listagem";
+
+    private CardLayout layoutTelas;
+    private javax.swing.JPanel painelTelas;
+    private listagemVIEW painelListagem;
 
     public cadastroVIEW() {
         initComponents();
-        setTitle("hr-auction-system");
+        setTitle("Casa de Leil\u00f5es");
         setLocationRelativeTo(null);
+        configurarNavegacaoEntreTelas();
     }
 
     @SuppressWarnings("unchecked")
@@ -30,7 +38,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Lucida Fax", 0, 24)); // NOI18N
-        jLabel1.setText("hr-auction-system");
+        jLabel1.setText("Cadastro de Leilão");
 
         jLabel3.setText("Cadastre um novo produto");
 
@@ -46,7 +54,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
             }
         });
 
-        btnCadastrar.setBackground(new java.awt.Color(153, 255, 255));
+        btnCadastrar.setBackground(new java.awt.Color(200, 200, 200));
         btnCadastrar.setText("Salvar");
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -80,7 +88,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
                     .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 477, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                            .addGap(202, 202, 202)
+                            .addGap(199, 199, 199)
                             .addComponent(jLabel3))
                         .addGroup(layout.createSequentialGroup()
                             .addGap(72, 72, 72)
@@ -141,11 +149,15 @@ public class cadastroVIEW extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto.");
             }
         } catch (IllegalArgumentException erro) {
-            JOptionPane.showMessageDialog(this, erro.getMessage());
+            AlertaUtil.mostrarAlerta(this, erro.getMessage());
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto.");
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
+        mostrarTelaListagem();
+    }//GEN-LAST:event_btnProdutosActionPerformed
 
     private ProdutosDTO capturarProdutoDaInterface() {
         String nome = cadastroNome.getText().trim();
@@ -157,12 +169,12 @@ public class cadastroVIEW extends javax.swing.JFrame {
 
         ProdutosDTO produto = new ProdutosDTO();
         produto.setNome(nome);
-        produto.setStatus("A Venda");
+        produto.setStatus("\u00c0 Venda");
 
         try {
             produto.setValor(new BigDecimal(valorInformado));
         } catch (NumberFormatException erro) {
-            throw new IllegalArgumentException("Informe um valor numerico valido.");
+            throw new IllegalArgumentException("Informe um valor num\u00e9rico v\u00e1lido.");
         }
 
         return produto;
@@ -180,20 +192,41 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }
 
     private void atualizarListagemSeAberta() {
-        if (listagemAberta != null && listagemAberta.isDisplayable()) {
-            listagemAberta.carregarTabelaProdutos();
+        if (painelListagem != null) {
+            painelListagem.carregarTabelaProdutos();
         }
     }
 
-    private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
-        if (listagemAberta == null || !listagemAberta.isDisplayable()) {
-            listagemAberta = new listagemVIEW();
-        }
+    private void configurarNavegacaoEntreTelas() {
+        Container painelCadastro = getContentPane();
 
-        listagemAberta.carregarTabelaProdutos();
-        listagemAberta.setVisible(true);
-        listagemAberta.toFront();
-    }//GEN-LAST:event_btnProdutosActionPerformed
+        layoutTelas = new CardLayout();
+        painelTelas = new javax.swing.JPanel(layoutTelas);
+
+        painelTelas.add(painelCadastro, TELA_CADASTRO);
+        painelListagem = new listagemVIEW(new Runnable() {
+            public void run() {
+                mostrarTelaCadastro();
+            }
+        });
+        painelTelas.add(painelListagem, TELA_LISTAGEM);
+
+        setContentPane(painelTelas);
+        mostrarTelaCadastro();
+    }
+
+    private void mostrarTelaCadastro() {
+        layoutTelas.show(painelTelas, TELA_CADASTRO);
+        pack();
+        setLocationRelativeTo(null);
+    }
+
+    private void mostrarTelaListagem() {
+        painelListagem.carregarTabelaProdutos();
+        layoutTelas.show(painelTelas, TELA_LISTAGEM);
+        pack();
+        setLocationRelativeTo(null);
+    }
 
     public static void main(String args[]) {
         try {

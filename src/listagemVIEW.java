@@ -1,14 +1,20 @@
 import java.sql.SQLException;
 import java.util.List;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-public class listagemVIEW extends javax.swing.JFrame {
+public class listagemVIEW extends javax.swing.JPanel {
+
+    private final Runnable acaoVoltar;
 
     public listagemVIEW() {
+        this(null);
+    }
+
+    public listagemVIEW(Runnable acaoVoltar) {
+        this.acaoVoltar = acaoVoltar;
         initComponents();
-        setTitle("hr-auction-system");
-        setLocationRelativeTo(null);
         carregarTabelaProdutos();
     }
 
@@ -27,19 +33,22 @@ public class listagemVIEW extends javax.swing.JFrame {
         btnVendas = new javax.swing.JButton();
         btnVoltar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
         listaProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
                 "ID", "Nome", "Valor", "Status"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(listaProdutos);
 
         jLabel1.setFont(new java.awt.Font("Lucida Fax", 0, 18)); // NOI18N
@@ -71,8 +80,8 @@ public class listagemVIEW extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -117,15 +126,13 @@ public class listagemVIEW extends javax.swing.JFrame {
                     .addComponent(btnVoltar))
                 .addGap(17, 17, 17))
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
         String idInformado = id_produto_venda.getText().trim();
 
         if (idInformado.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Informe o ID do produto.");
+            AlertaUtil.mostrarAlerta(this, "Informe o ID do produto.");
             return;
         }
 
@@ -138,10 +145,10 @@ public class listagemVIEW extends javax.swing.JFrame {
                 id_produto_venda.setText("");
                 carregarTabelaProdutos();
             } else {
-                JOptionPane.showMessageDialog(this, "Produto nao encontrado ou ja vendido.");
+                AlertaUtil.mostrarAlerta(this, "Produto n\u00e3o encontrado ou j\u00e1 vendido.");
             }
         } catch (NumberFormatException erro) {
-            JOptionPane.showMessageDialog(this, "Informe um ID numerico valido.");
+            AlertaUtil.mostrarAlerta(this, "Informe um ID num\u00e9rico v\u00e1lido.");
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(this, "Erro ao atualizar produto: " + erro.getMessage());
         }
@@ -152,7 +159,9 @@ public class listagemVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        this.dispose();
+        if (acaoVoltar != null) {
+            acaoVoltar.run();
+        }
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     public static void main(String args[]) {
@@ -175,7 +184,12 @@ public class listagemVIEW extends javax.swing.JFrame {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new listagemVIEW().setVisible(true);
+                JFrame frame = new JFrame("Casa de Leil\u00f5es");
+                frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                frame.setContentPane(new listagemVIEW());
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
     }
