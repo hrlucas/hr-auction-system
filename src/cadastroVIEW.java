@@ -4,6 +4,8 @@ import javax.swing.JOptionPane;
 
 public class cadastroVIEW extends javax.swing.JFrame {
 
+    private listagemVIEW listagemAberta;
+
     public cadastroVIEW() {
         initComponents();
         setTitle("hr-auction-system");
@@ -134,6 +136,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
             if (cadastrado) {
                 JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso.");
                 limparFormulario();
+                atualizarListagemSeAberta();
             } else {
                 JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto.");
             }
@@ -176,9 +179,20 @@ public class cadastroVIEW extends javax.swing.JFrame {
         cadastroNome.requestFocus();
     }
 
+    private void atualizarListagemSeAberta() {
+        if (listagemAberta != null && listagemAberta.isDisplayable()) {
+            listagemAberta.carregarTabelaProdutos();
+        }
+    }
+
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
-        listagemVIEW listagem = new listagemVIEW();
-        listagem.setVisible(true);
+        if (listagemAberta == null || !listagemAberta.isDisplayable()) {
+            listagemAberta = new listagemVIEW();
+        }
+
+        listagemAberta.carregarTabelaProdutos();
+        listagemAberta.setVisible(true);
+        listagemAberta.toFront();
     }//GEN-LAST:event_btnProdutosActionPerformed
 
     public static void main(String args[]) {
