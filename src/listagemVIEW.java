@@ -1,5 +1,5 @@
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -9,7 +9,7 @@ public class listagemVIEW extends javax.swing.JFrame {
         initComponents();
         setTitle("hr-auction-system");
         setLocationRelativeTo(null);
-        listarProdutos();
+        carregarTabelaProdutos();
     }
 
     @SuppressWarnings("unchecked")
@@ -136,7 +136,7 @@ public class listagemVIEW extends javax.swing.JFrame {
             if (produtosdao.venderProduto(id)) {
                 JOptionPane.showMessageDialog(this, "Produto marcado como vendido.");
                 id_produto_venda.setText("");
-                listarProdutos();
+                carregarTabelaProdutos();
             } else {
                 JOptionPane.showMessageDialog(this, "Produto nao encontrado ou ja vendido.");
             }
@@ -148,7 +148,7 @@ public class listagemVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        listarProdutos();
+        carregarTabelaProdutos();
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
@@ -193,13 +193,13 @@ public class listagemVIEW extends javax.swing.JFrame {
     private javax.swing.JTable listaProdutos;
     // End of variables declaration//GEN-END:variables
 
-    private void listarProdutos() {
+    public void carregarTabelaProdutos() {
         try {
             ProdutosDAO produtosdao = new ProdutosDAO();
             DefaultTableModel model = (DefaultTableModel) listaProdutos.getModel();
             model.setNumRows(0);
 
-            ArrayList<ProdutosDTO> listagem = produtosdao.listarProdutos();
+            List<ProdutosDTO> listagem = produtosdao.consultarProdutos();
 
             for (ProdutosDTO produto : listagem) {
                 model.addRow(new Object[]{
