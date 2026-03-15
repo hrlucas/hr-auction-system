@@ -1,0 +1,34 @@
+# Saidas de build
+/build/
+/dist/
+/out/
+/target/
+*.class
+*.war
+*.ear
+
+# Manter JARs locais fora do commit (fluxo local)
+*.jar
+
+# Arquivos locais do NetBeans
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+**/.netbeans_automatic_build
+**/.netbeans_update_resources
+
+# Logs e arquivos temporarios
+*.log
+*.tmp
+*.temp
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Configuracoes locais/sensiveis
+*.local
+.env
+.env.*
