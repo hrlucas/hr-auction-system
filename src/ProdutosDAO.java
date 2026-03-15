@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class ProdutosDAO {
 
-    public boolean cadastrarProduto(ProdutosDTO produto) throws SQLException {
+    public boolean salvarProduto(ProdutosDTO produto) throws SQLException {
         String sql = "INSERT INTO produtos (nome, valor, status) VALUES (?, ?, ?)";
 
         try (Connection conn = new conectaDAO().connectDB();
@@ -16,6 +16,10 @@ public class ProdutosDAO {
             prep.setString(3, produto.getStatus());
             return prep.executeUpdate() > 0;
         }
+    }
+
+    public boolean cadastrarProduto(ProdutosDTO produto) throws SQLException {
+        return salvarProduto(produto);
     }
 
     public ArrayList<ProdutosDTO> listarProdutos() throws SQLException {

@@ -45,7 +45,7 @@ public class cadastroVIEW extends javax.swing.JFrame {
         });
 
         btnCadastrar.setBackground(new java.awt.Color(153, 255, 255));
-        btnCadastrar.setText("Cadastrar");
+        btnCadastrar.setText("Salvar");
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadastrarActionPerformed(evt);
@@ -127,12 +127,27 @@ public class cadastroVIEW extends javax.swing.JFrame {
     }//GEN-LAST:event_cadastroNomeActionPerformed
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
+        try {
+            ProdutosDTO produto = capturarProdutoDaInterface();
+            salvarProduto(produto);
+            limparFormulario();
+        } catch (IllegalArgumentException erro) {
+            JOptionPane.showMessageDialog(this, erro.getMessage());
+        } catch (SQLException erro) {
+            java.util.logging.Logger.getLogger(cadastroVIEW.class.getName()).log(
+                    java.util.logging.Level.SEVERE,
+                    "Erro ao salvar produto no banco",
+                    erro
+            );
+        }
+    }//GEN-LAST:event_btnCadastrarActionPerformed
+
+    private ProdutosDTO capturarProdutoDaInterface() {
         String nome = cadastroNome.getText().trim();
         String valorInformado = cadastroValor.getText().trim().replace(",", ".");
 
         if (nome.isEmpty() || valorInformado.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencha nome e valor antes de cadastrar.");
-            return;
+            throw new IllegalArgumentException("Preencha nome e valor antes de salvar.");
         }
 
         ProdutosDTO produto = new ProdutosDTO();
@@ -142,23 +157,22 @@ public class cadastroVIEW extends javax.swing.JFrame {
         try {
             produto.setValor(new BigDecimal(valorInformado));
         } catch (NumberFormatException erro) {
-            JOptionPane.showMessageDialog(this, "Informe um valor numerico valido.");
-            return;
+            throw new IllegalArgumentException("Informe um valor numerico valido.");
         }
 
-        try {
-            ProdutosDAO produtodao = new ProdutosDAO();
+        return produto;
+    }
 
-            if (produtodao.cadastrarProduto(produto)) {
-                JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso.");
-                cadastroNome.setText("");
-                cadastroValor.setText("");
-                cadastroNome.requestFocus();
-            }
-        } catch (SQLException erro) {
-            JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto: " + erro.getMessage());
-        }
-    }//GEN-LAST:event_btnCadastrarActionPerformed
+    private void salvarProduto(ProdutosDTO produto) throws SQLException {
+        ProdutosDAO produtodao = new ProdutosDAO();
+        produtodao.salvarProduto(produto);
+    }
+
+    private void limparFormulario() {
+        cadastroNome.setText("");
+        cadastroValor.setText("");
+        cadastroNome.requestFocus();
+    }
 
     private void btnProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosActionPerformed
         listagemVIEW listagem = new listagemVIEW();
