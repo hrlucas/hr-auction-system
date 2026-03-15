@@ -129,16 +129,18 @@ public class cadastroVIEW extends javax.swing.JFrame {
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
         try {
             ProdutosDTO produto = capturarProdutoDaInterface();
-            salvarProduto(produto);
-            limparFormulario();
+            boolean cadastrado = salvarProduto(produto);
+
+            if (cadastrado) {
+                JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso.");
+                limparFormulario();
+            } else {
+                JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto.");
+            }
         } catch (IllegalArgumentException erro) {
             JOptionPane.showMessageDialog(this, erro.getMessage());
         } catch (SQLException erro) {
-            java.util.logging.Logger.getLogger(cadastroVIEW.class.getName()).log(
-                    java.util.logging.Level.SEVERE,
-                    "Erro ao salvar produto no banco",
-                    erro
-            );
+            JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto.");
         }
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
@@ -163,9 +165,9 @@ public class cadastroVIEW extends javax.swing.JFrame {
         return produto;
     }
 
-    private void salvarProduto(ProdutosDTO produto) throws SQLException {
+    private boolean salvarProduto(ProdutosDTO produto) throws SQLException {
         ProdutosDAO produtodao = new ProdutosDAO();
-        produtodao.salvarProduto(produto);
+        return produtodao.salvarProduto(produto);
     }
 
     private void limparFormulario() {
