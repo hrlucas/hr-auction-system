@@ -48,11 +48,12 @@ public class ProdutosDAO {
     }
 
     public boolean venderProduto(int id) throws SQLException {
-        String sql = "UPDATE produtos SET status = 'Vendido' WHERE id = ? AND status <> 'Vendido'";
+        String sql = "UPDATE produtos SET status = ? WHERE id = ?";
 
         try (Connection conn = new conectaDAO().connectDB();
              PreparedStatement prep = conn.prepareStatement(sql)) {
-            prep.setInt(1, id);
+            prep.setString(1, "Vendido");
+            prep.setInt(2, id);
             return prep.executeUpdate() > 0;
         }
     }
