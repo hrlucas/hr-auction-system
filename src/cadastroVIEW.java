@@ -8,14 +8,16 @@ public class cadastroVIEW extends javax.swing.JFrame {
 
     private static final String TELA_CADASTRO = "cadastro";
     private static final String TELA_LISTAGEM = "listagem";
+    private static final String TELA_VENDAS = "vendas";
 
     private CardLayout layoutTelas;
     private javax.swing.JPanel painelTelas;
     private listagemVIEW painelListagem;
+    private vendasVIEW painelVendas;
 
     public cadastroVIEW() {
         initComponents();
-        setTitle("Casa de Leil\u00f5es");
+        setTitle("Casa de Leilões");
         setLocationRelativeTo(null);
         configurarNavegacaoEntreTelas();
     }
@@ -169,12 +171,12 @@ public class cadastroVIEW extends javax.swing.JFrame {
 
         ProdutosDTO produto = new ProdutosDTO();
         produto.setNome(nome);
-        produto.setStatus("\u00c0 Venda");
+        produto.setStatus("À Venda");
 
         try {
             produto.setValor(new BigDecimal(valorInformado));
         } catch (NumberFormatException erro) {
-            throw new IllegalArgumentException("Informe um valor num\u00e9rico v\u00e1lido.");
+            throw new IllegalArgumentException("Informe um valor numérico válido.");
         }
 
         return produto;
@@ -195,6 +197,10 @@ public class cadastroVIEW extends javax.swing.JFrame {
         if (painelListagem != null) {
             painelListagem.carregarTabelaProdutos();
         }
+
+        if (painelVendas != null) {
+            painelVendas.carregarTabelaProdutosVendidos();
+        }
     }
 
     private void configurarNavegacaoEntreTelas() {
@@ -204,12 +210,24 @@ public class cadastroVIEW extends javax.swing.JFrame {
         painelTelas = new javax.swing.JPanel(layoutTelas);
 
         painelTelas.add(painelCadastro, TELA_CADASTRO);
+
         painelListagem = new listagemVIEW(new Runnable() {
             public void run() {
                 mostrarTelaCadastro();
             }
+        }, new Runnable() {
+            public void run() {
+                mostrarTelaVendas();
+            }
         });
         painelTelas.add(painelListagem, TELA_LISTAGEM);
+
+        painelVendas = new vendasVIEW(new Runnable() {
+            public void run() {
+                mostrarTelaListagem();
+            }
+        });
+        painelTelas.add(painelVendas, TELA_VENDAS);
 
         setContentPane(painelTelas);
         mostrarTelaCadastro();
@@ -224,6 +242,13 @@ public class cadastroVIEW extends javax.swing.JFrame {
     private void mostrarTelaListagem() {
         painelListagem.carregarTabelaProdutos();
         layoutTelas.show(painelTelas, TELA_LISTAGEM);
+        pack();
+        setLocationRelativeTo(null);
+    }
+
+    private void mostrarTelaVendas() {
+        painelVendas.carregarTabelaProdutosVendidos();
+        layoutTelas.show(painelTelas, TELA_VENDAS);
         pack();
         setLocationRelativeTo(null);
     }

@@ -7,13 +7,19 @@ import javax.swing.table.DefaultTableModel;
 public class listagemVIEW extends javax.swing.JPanel {
 
     private final Runnable acaoVoltar;
+    private final Runnable acaoConsultarVendas;
 
     public listagemVIEW() {
-        this(null);
+        this(null, null);
     }
 
     public listagemVIEW(Runnable acaoVoltar) {
+        this(acaoVoltar, null);
+    }
+
+    public listagemVIEW(Runnable acaoVoltar, Runnable acaoConsultarVendas) {
         this.acaoVoltar = acaoVoltar;
+        this.acaoConsultarVendas = acaoConsultarVendas;
         initComponents();
         id_produto_venda.setEditable(false);
         id_produto_venda.setEnabled(false);
@@ -81,7 +87,7 @@ public class listagemVIEW extends javax.swing.JPanel {
             }
         });
 
-        btnVendas.setText("Atualizar Lista");
+        btnVendas.setText("Consultar Vendas");
         btnVendas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVendasActionPerformed(evt);
@@ -170,7 +176,9 @@ public class listagemVIEW extends javax.swing.JPanel {
     }//GEN-LAST:event_btnVenderActionPerformed
 
     private void btnVendasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVendasActionPerformed
-        carregarTabelaProdutos();
+        if (acaoConsultarVendas != null) {
+            acaoConsultarVendas.run();
+        }
     }//GEN-LAST:event_btnVendasActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
