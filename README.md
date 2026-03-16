@@ -12,7 +12,7 @@
   </a>
 </p>
 
-> Desenvolvi o **hr-auction-system** como atividade prática do curso Técnico em Desenvolvimento de Sistemas, com o objetivo de demonstrar o uso de **versionamento de código com Git e GitHub** em um projeto Java. O sistema representa a base de um software para gerenciamento de produtos em uma casa de leilões.
+> Projeto Java desktop desenvolvido como atividade prática do curso Técnico em Desenvolvimento de Sistemas, com foco em Swing, MySQL, arquitetura em camadas e versionamento com Git/GitHub.
 
 ---
 
@@ -24,80 +24,73 @@
 
 ## 📌 Visão Geral
 
-O **hr-auction-system** é uma aplicação Java que simula o funcionamento básico de um sistema de leilões, permitindo o cadastro, a listagem e a atualização de status dos produtos.
+O **hr-auction-system** simula o funcionamento básico de uma casa de leilões, permitindo:
 
-O projeto foi utilizado como base para prática de:
+- cadastrar produtos;
+- listar produtos disponíveis;
+- marcar produtos como vendidos;
+- consultar produtos vendidos em uma tela dedicada.
 
-- controle de versão com Git
-- integração com GitHub
-- organização de código Java
-- persistência de dados em banco MySQL
-- desenvolvimento em ambiente NetBeans
-
----
-
-## 🧠 Funcionalidades
-
-- Cadastro de produtos para leilão
-- Registro de informações essenciais dos produtos
-- Persistência de dados em banco relacional
-- Listagem de produtos cadastrados
-- Marcação de produto como vendido
-- Versionamento completo do projeto utilizando Git e GitHub
+A interface foi construída em **Java Swing com formulários NetBeans (Java + Form)** e os dados são persistidos em **MySQL**.
 
 ---
 
-## 🏗️ Arquitetura
+## 🧠 Funcionalidades Implementadas
+
+- Cadastro de produtos para leilão.
+- Persistência de produtos no banco de dados.
+- Listagem de produtos disponíveis.
+- Venda de produto com atualização de status para **Vendido**.
+- Tela de produtos vendidos com consulta dedicada.
+- Navegação entre telas na mesma janela usando `CardLayout`.
+- Alertas customizados com `JDialog` (com escurecimento da tela de fundo).
+- Tabelas configuradas como somente leitura.
+
+---
+
+## 🏗️ Arquitetura do Projeto
 
 ```text
 hr-auction-system/
-│
-├── nbproject/                 # configurações do projeto NetBeans
+├── nbproject/                   # configurações do projeto NetBeans
 ├── src/
-│   ├── conectaDAO.java        # conexão com banco de dados (JDBC)
-│   ├── ProdutosDAO.java       # camada de acesso a dados
-│   ├── ProdutosDTO.java       # entidade de produto
-│   ├── cadastroVIEW.java      # tela de cadastro
-│   └── listagemVIEW.java      # tela de listagem e venda
-│
+│   ├── conectaDAO.java          # conexão JDBC com MySQL
+│   ├── ProdutosDAO.java         # acesso a dados (cadastro, consulta e venda)
+│   ├── ProdutosDTO.java         # objeto de transferência de dados (produto)
+│   ├── cadastroVIEW.java/.form  # tela de cadastro (JFrame)
+│   ├── listagemVIEW.java/.form  # tela de listagem (JPanel)
+│   ├── vendasVIEW.java/.form    # tela de produtos vendidos (JPanel)
+│   ├── AlertaDialog.java/.form  # modal de alerta customizado
+│   └── AlertaUtil.java          # utilitário para exibição de alertas
 ├── sql/
-│   └── init.sql               # script de criação do banco de dados
+│   └── init.sql                 # script de criação do banco e dados iniciais
 ├── README.md
-└── build/                     # arquivos gerados pela IDE
+└── build/                       # arquivos gerados pela IDE
 ```
-
-### Organização
-
-- **conectaDAO.java**: responsável pela configuração de conexão com o banco MySQL.
-- **ProdutosDAO.java**: camada de acesso ao banco de dados (operações CRUD).
-- **ProdutosDTO.java**: classe que representa os dados do sistema.
-- **cadastroVIEW.java / listagemVIEW.java**: interface gráfica da aplicação.
 
 ---
 
 ## 🛠️ Tecnologias
 
-- Java 18
+- Java 18+
 - Java Swing
+- NetBeans IDE (Java + Form)
 - MySQL
-- NetBeans IDE
-- Git
-- GitHub
+- JDBC
+- Git e GitHub
 
 ---
 
 ## ⚙️ Requisitos
 
-- JDK 18+
-- MySQL instalado e ativo
+- JDK 18 ou superior
+- MySQL instalado e em execução
 - NetBeans IDE
-- Git instalado na máquina
+- Git instalado
 
 ---
 
 ## 🔧 Instalação
-
-Clone o repositório:
 
 ```bash
 git clone https://github.com/hrlucas/hr-auction-system
@@ -108,15 +101,15 @@ cd hr-auction-system
 
 ## 🗄️ Banco de Dados
 
-Antes de executar o sistema, importe o script disponibilizado no projeto:
+Antes de executar o sistema, importe o script:
 
 ```sql
 SOURCE sql/init.sql;
 ```
 
-Esse script criará automaticamente o schema `hr_auction_system`, a tabela `produtos` e os registros iniciais.
+O script cria o schema `hr_auction_system`, a tabela `produtos` e registros iniciais.
 
-A conexão do sistema utiliza variáveis de ambiente com valores padrão:
+Variáveis de ambiente suportadas para conexão:
 
 - `DB_HOST` (padrão: `localhost`)
 - `DB_PORT` (padrão: `3306`)
@@ -124,16 +117,16 @@ A conexão do sistema utiliza variáveis de ambiente com valores padrão:
 - `DB_USER` (padrão: `root`)
 - `DB_PASSWORD` (padrão: vazio)
 
-Para evitar os avisos de SSL no ambiente local, a URL JDBC está configurada com `useSSL=false`.
+A URL JDBC usa `useSSL=false` para ambiente local.
 
 ---
 
 ## ▶️ Execução
 
-### Opção 1: NetBeans (recomendada)
+### NetBeans (recomendado)
 
 1. Abra o NetBeans.
-2. Vá em **File → Open Project**.
+2. Acesse **File → Open Project**.
 3. Selecione a pasta `hr-auction-system`.
 4. Execute o projeto pela IDE.
 
@@ -142,94 +135,55 @@ Para evitar os avisos de SSL no ambiente local, a URL JDBC está configurada com
 ## 🖥️ Telas Principais
 
 | Tela | Objetivo |
-|-----|----------|
-| Cadastro de Produtos | Permitir registrar novos itens para leilão |
-| Lista de Produtos | Visualizar produtos cadastrados |
-| Gerenciamento | Manutenção e controle de dados do sistema |
+|------|----------|
+| Cadastro de Produtos | Cadastrar novos produtos para leilão |
+| Lista de Produtos | Exibir produtos disponíveis e permitir venda |
+| Produtos Vendidos | Exibir apenas itens com status `Vendido` |
+| Alerta | Exibir validações e mensagens de atenção |
 
 ---
 
-## 📋 Regras de Negócio (Implementadas)
+## 📋 Regras de Negócio (Estado Atual)
 
-- Cada produto deve possuir um identificador único.
-- O sistema permite cadastrar informações básicas de produtos.
-- Os dados cadastrados são armazenados em banco de dados MySQL.
-- O sistema permite atualizar o status de um produto para **Vendido**.
-
----
-
-## 🔎 Adesão aos Requisitos (Estado Atual)
-
-### Requisitos Funcionais
-
-- **RF01**: Permitir cadastro de produtos para leilão.  
-  **Status**: Implementado.
-
-- **RF02**: Permitir visualização dos produtos cadastrados.  
-  **Status**: Implementado.
-
-- **RF03**: Persistir dados em banco de dados relacional.  
-  **Status**: Implementado.
-
-- **RF04**: Permitir gerenciamento básico dos registros cadastrados.  
-  **Status**: Implementado.
+- Cada produto possui identificador único.
+- Produto novo é cadastrado com status inicial **À Venda**.
+- Venda altera status para **Vendido**.
+- Produtos vendidos deixam de aparecer na listagem de disponíveis.
+- Produtos vendidos aparecem na tela de consulta de vendas.
 
 ---
 
-### Requisitos Não Funcionais
+## 🌿 Versionamento
 
-- **RNF01**: O sistema deverá ser desenvolvido em Java.  
-  **Status**: Implementado.
-
-- **RNF02**: O banco de dados deverá ser MySQL.  
-  **Status**: Implementado.
-
-- **RNF03**: O sistema deverá utilizar versionamento de código com Git.  
-  **Status**: Implementado.
-
-- **RNF04**: O repositório deverá ser hospedado no GitHub.  
-  **Status**: Implementado.
+- Branch principal: `development`
+- Branch de melhorias: `improvements`
+- Commits seguem Conventional Commits em português.
 
 ---
 
-## 🧪 Testes Locais Rápidos
+## 🧪 Testes Locais Sugeridos
 
-Fluxo manual sugerido:
+1. Executar `sql/init.sql` no MySQL.
+2. Abrir o projeto no NetBeans e executar.
+3. Cadastrar um novo produto.
+4. Confirmar persistência no banco.
+5. Vender produto na tela de listagem.
+6. Confirmar remoção da lista de disponíveis.
+7. Acessar **Consultar Vendas** e validar exibição do produto vendido.
 
-1. Importar e executar o script `sql/init.sql`.
-2. Executar o sistema pelo NetBeans.
-3. Realizar cadastro de produtos.
-4. Verificar persistência no banco de dados.
-5. Validar exibição correta das informações cadastradas.
-6. Marcar um produto como vendido e atualizar a listagem.
-
-> Atualmente, não há suíte automatizada de testes versionada no projeto.
-
----
-
-## ✨ Atualizações Recentes (UI e UX)
-
-- O fluxo entre cadastro e listagem agora ocorre em janela única, com alternância de telas via `CardLayout`.
-- A tabela de produtos foi configurada como somente leitura, bloqueando edição por duplo clique.
-- Os alertas passaram a usar um diálogo Swing dedicado (`AlertaDialog`) no lugar de uso direto de `JOptionPane`.
-- O modal de alerta recebeu padronização visual e foco na mensagem principal ao usuário.
-- Ao exibir alertas, a tela de fundo é escurecida para reforçar a prioridade da ação.
-- Foram adicionados os arquivos `AlertaDialog.java`, `AlertaDialog.form` e `AlertaUtil.java`.
-- A pasta `test/` foi removida por não conter suíte de testes ativa.
+> O projeto não possui suíte automatizada versionada até o momento.
 
 ---
 
 ## 📄 Licença
 
-Licenciado sob MIT. Você pode usar, modificar e distribuir, mantendo o aviso de copyright e atribuindo crédito a **Lucas Hochmann Rosa / hrlucas.dev**.
-
-Consulte o arquivo `LICENCE.txt`.
+Licenciado sob MIT. Consulte `LICENCE.txt`.
 
 ---
 
 ## 👨‍💻 Autor
 
-**Lucas Hochmann Rosa / hrlucas.dev** - Desenvolvedor Full Stack
+**Lucas Hochmann Rosa / hrlucas.dev**
 
-- GitHub: https://github.com/hrlucas  
+- GitHub: https://github.com/hrlucas
 - LinkedIn: https://www.linkedin.com/in/lucas-hochmann-rosa-456bb7339/
