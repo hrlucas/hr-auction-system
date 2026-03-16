@@ -15,6 +15,21 @@ public class listagemVIEW extends javax.swing.JPanel {
     public listagemVIEW(Runnable acaoVoltar) {
         this.acaoVoltar = acaoVoltar;
         initComponents();
+        id_produto_venda.setEditable(false);
+        id_produto_venda.setEnabled(false);
+
+        listaProdutos.getSelectionModel().addListSelectionListener(evento -> {
+            if (!evento.getValueIsAdjusting()) {
+                int linhaSelecionada = listaProdutos.getSelectedRow();
+                if (linhaSelecionada >= 0) {
+                    Object id = listaProdutos.getValueAt(linhaSelecionada, 0);
+                    id_produto_venda.setText(String.valueOf(id));
+                } else {
+                    id_produto_venda.setText("");
+                }
+            }
+        });
+
         carregarTabelaProdutos();
     }
 
@@ -129,26 +144,26 @@ public class listagemVIEW extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVenderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVenderActionPerformed
-        String idInformado = id_produto_venda.getText().trim();
+        int linhaSelecionada = listaProdutos.getSelectedRow();
 
-        if (idInformado.isEmpty()) {
-            AlertaUtil.mostrarAlerta(this, "Informe o ID do produto.");
+        if (linhaSelecionada < 0) {
+            AlertaUtil.mostrarAlerta(this, "Selecione um produto na tabela para vender.");
             return;
         }
 
         try {
             ProdutosDAO produtosdao = new ProdutosDAO();
-            int id = Integer.parseInt(idInformado);
+            int id = Integer.parseInt(String.valueOf(listaProdutos.getValueAt(linhaSelecionada, 0)));
 
             if (produtosdao.venderProduto(id)) {
                 JOptionPane.showMessageDialog(this, "Produto marcado como vendido.");
                 id_produto_venda.setText("");
                 carregarTabelaProdutos();
             } else {
-                AlertaUtil.mostrarAlerta(this, "Produto n\u00e3o encontrado ou j\u00e1 vendido.");
+                AlertaUtil.mostrarAlerta(this, "Produto não encontrado ou já vendido.");
             }
         } catch (NumberFormatException erro) {
-            AlertaUtil.mostrarAlerta(this, "Informe um ID num\u00e9rico v\u00e1lido.");
+            AlertaUtil.mostrarAlerta(this, "ID do produto inválido.");
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(this, "Erro ao atualizar produto: " + erro.getMessage());
         }
@@ -216,12 +231,14 @@ public class listagemVIEW extends javax.swing.JPanel {
             List<ProdutosDTO> listagem = produtosdao.consultarProdutos();
 
             for (ProdutosDTO produto : listagem) {
-                model.addRow(new Object[]{
-                    produto.getId(),
-                    produto.getNome(),
-                    produto.getValor(),
-                    produto.getStatus()
-                });
+                if (!"Vendido".equalsIgnoreCase(produto.getStatus())) {
+                    model.addRow(new Object[]{
+                        produto.getId(),
+                        produto.getNome(),
+                        produto.getValor(),
+                        produto.getStatus()
+                    });
+                }
             }
         } catch (SQLException erro) {
             JOptionPane.showMessageDialog(this, "Erro ao carregar produtos: " + erro.getMessage());
