@@ -12,8 +12,7 @@
   </a>
 </p>
 
-> Projeto Java desktop desenvolvido como atividade prática do curso Técnico em Desenvolvimento de Sistemas, com foco em Swing, MySQL, arquitetura em camadas e versionamento com Git/GitHub.
-
+> Desenvolvi o **hr-auction-system** como atividade prática do curso Técnico em Desenvolvimento de Sistemas, com o objetivo de demonstrar o uso de **versionamento de código com Git e GitHub** em um projeto Java. O sistema representa a base de um software para gerenciamento de produtos em uma casa de leilões.
 ---
 
 ## 🚧 Status do Projeto
@@ -24,7 +23,7 @@
 
 ## 📌 Visão Geral
 
-O **hr-auction-system** simula o funcionamento básico de uma casa de leilões, permitindo:
+O **hr-auction-system** é uma aplicação Java que simula o funcionamento básico de um sistema de leilões, permitindo:
 
 - cadastrar produtos;
 - listar produtos disponíveis;
