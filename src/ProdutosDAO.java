@@ -47,6 +47,28 @@ public class ProdutosDAO {
         return consultarProdutos();
     }
 
+    public List<ProdutosDTO> listarProdutosVendidos() throws SQLException {
+        List<ProdutosDTO> listagem = new ArrayList<>();
+        String sql = "SELECT id, nome, valor, status FROM produtos WHERE status = ? ORDER BY id";
+
+        try (Connection conn = new conectaDAO().connectDB();
+             PreparedStatement prep = conn.prepareStatement(sql)) {
+            prep.setString(1, "Vendido");
+
+            try (ResultSet resultset = prep.executeQuery()) {
+                while (resultset.next()) {
+                    ProdutosDTO produto = new ProdutosDTO();
+                    produto.setId(resultset.getInt("id"));
+                    produto.setNome(resultset.getString("nome"));
+                    produto.setValor(resultset.getBigDecimal("valor"));
+                    produto.setStatus(resultset.getString("status"));
+                    listagem.add(produto);
+                }
+            }
+        }
+
+        return listagem;
+    }
     public boolean venderProduto(int id) throws SQLException {
         String sql = "UPDATE produtos SET status = ? WHERE id = ?";
 
